@@ -3,8 +3,10 @@ from tournament import Tournament as t
 from player import Player as p
 
 def main():
-    view = v()
-    switch_choice(view)
+    # view = v()
+    # switch_choice(view)
+
+    player = p()
 
 def switch_choice(view_object):
     """List of interactions choices"""
