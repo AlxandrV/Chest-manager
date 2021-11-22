@@ -1,14 +1,15 @@
 from view.view import View as v
-from model.tournament import Tournament as t
+from controller.tournamentManager import TournamentManager as tm
 from controller.playerManager import PlayerManager as pm
 
 def main():
     # view = v()
     # switch_choice(view)
 
-    player = pm()
-    create_player(player)
+    # player = pm()
+    # create_player(player)
 
+    tournament = tm()
 
 def switch_choice(view_object):
     """List of interactions choices"""

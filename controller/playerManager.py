@@ -3,7 +3,7 @@ from view.playerView import PlayerView as pv
 
 class PlayerManager:
 
-    def new_player(self) -> None:
+    def new_player(self) -> object:
         player_view = pv()
         specifications_new_player = player_view.new_player()
         specifications_new_player['ranking'] = 0
