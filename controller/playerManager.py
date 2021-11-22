@@ -3,9 +3,8 @@ from view.playerView import PlayerView as pv
 
 class PlayerManager:
 
-    def new_player(self):
-        player = p()
+    def new_player(self) -> None:
         player_view = pv()
         specifications_new_player = player_view.new_player()
-
-        print(specifications_new_player)
+        specifications_new_player['ranking'] = 0
+        return p(specifications_new_player)

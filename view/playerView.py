@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from view.view import View as v
 
 class PlayerView:
@@ -5,7 +7,7 @@ class PlayerView:
     def __init__(self) -> None:
         self.view = v()
     
-    def new_player(self):
+    def new_player(self) -> dict:
         specifications = {}
 
         name = self.name()
@@ -22,14 +24,38 @@ class PlayerView:
 
         return specifications
 
-    def name(self, string_to_input="Nom : "):
+    def name(self, string_to_input="Prénom : "):
         return self.view.input(string_to_input)
 
-    def lastname(self, string_to_input="Prénom : "):
+    def lastname(self, string_to_input="Nom : "):
         return self.view.input(string_to_input)
 
     def birthday(self, string_to_input="Date de naissance (jj/mm/aaaa) : "):
-        return self.view.input(string_to_input)
+        birthday = self.view.input(string_to_input)
+        date_format = "%d/%m/%Y"
 
-    def gender(self, string_to_input="Sexe\n1 : M\n2 : F\n3 : Autre\nSaisir un nombre : "):
-        return self.view.input(string_to_input)
+        try:
+            res = bool(datetime.strptime(birthday, date_format))
+            return birthday
+        except ValueError as e:
+            print("Format de date incorrect !\n")
+            return self.birthday()
+
+
+    def gender(self, string_to_input="Sexe\n1 : M\n2 : F\n3 : Autre\nSaisir un nombre : ", choice=3):
+        gender = self.view.input(string_to_input)
+
+        try:
+            gender = int(gender)
+
+            if gender > choice or gender <= 0:
+                print(f"Veuillez choisir un nombre dans la liste !")
+                return self.gender()
+            else:
+                return gender
+
+        except ValueError as e:
+            print(f"Veuillez choisir un nombre dans la liste !")
+            return self.gender()
+
+
