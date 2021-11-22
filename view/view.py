@@ -13,3 +13,5 @@ class View:
             print("\nVeuillez rentrer un nombre parmis la liste, merci !\n")
             self.list_choice()
         
+    def input(self, string_to_input) -> str:
+        return input(string_to_input)

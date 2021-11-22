@@ -3,10 +3,11 @@ from datetime import datetime
 class Player:
     
     def __init__(self) -> None:
-        self._set_name()
-        self._set_last_name()
-        self._set_birthday()
-        self._set_ranking()
+        # self._set_name()
+        # self._set_last_name()
+        # self._set_birthday()
+        # self._set_ranking()
+        print("coucou")
 
     def _set_name(self, name) -> None:
         self._name = str(name)
