@@ -10,6 +10,7 @@ def main():
     # create_player(player)
 
     tournament = tm()
+    create_tournament(tournament)
 
 def switch_choice(view_object):
     """List of interactions choices"""
@@ -26,9 +27,10 @@ def switch_choice(view_object):
         print("\nCe choix n'est pas dans la iste !\n")
         switch_choice(view_object)
 
-def create_tournament():
+def create_tournament(tournament_manager):
     """Create a new tournament"""
-    new_tournament = t()
+    tournament_manager.new_tournament()
 
 def create_player(player_manager):
+    """Create a new player"""
     player_manager.new_player()
