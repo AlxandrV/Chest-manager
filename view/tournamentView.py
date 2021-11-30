@@ -124,6 +124,10 @@ class TournamentView:
                     print("Le tournoi doit comporter au moins 2 joueurs !")
                     return self.number_players()
 
+                elif players >= 0 and (players % 2) != 0 :
+                    print("Le nombre de joueurs doit être paire !")
+                    return self.number_players()
+
                 else:
                     return players
 

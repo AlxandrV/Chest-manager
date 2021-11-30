@@ -5,7 +5,7 @@ class Player:
     def __init__(self, specification) -> None:
         self._set_name(specification['name'])
         self._set_last_name(specification['lastname'])
-        self._set_birthday(specification['birthday'])
+        # self._set_birthday(specification['birthday'])
         self._set_ranking(specification['ranking'])
 
     def _set_name(self, name) -> None:

@@ -17,11 +17,11 @@ class PlayerView:
         lastname = self.lastname()
         specifications['lastname'] = lastname
 
-        birthday = self.birthday()
-        specifications['birthday'] = birthday
+        # birthday = self.birthday()
+        # specifications['birthday'] = birthday
 
-        gender = self.gender()
-        specifications['gender'] = gender
+        # gender = self.gender()
+        # specifications['gender'] = gender
 
         return specifications
 
