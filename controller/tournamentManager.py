@@ -18,7 +18,4 @@ class TournamentManager:
             list_players.append(self.player_manager.add_player())
 
         sorted_list_players = self.player_manager.sorted_players(list_players)
-
-        list_match = []
         
-        print(sorted_list_players[0].get_ranking())

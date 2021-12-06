@@ -1,7 +1,8 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-import controller.controller as c
+from controller.controller import Controller as c
 
 if __name__ == "__main__":
-    c.main()
+    main_controller = c()
+    main_controller.run()
