@@ -11,11 +11,11 @@ class Controller:
         # view = v()
         # switch_choice(view)
 
-        # player = pm()
-        # create_player(player)
+        player = pm()
+        self.create_player(player)
 
-        tournament = tm()
-        self.create_tournament(tournament)
+        # tournament = tm()
+        # self.create_tournament(tournament)
 
     def switch_choice(self,view_object):
         """List of interactions choices"""
