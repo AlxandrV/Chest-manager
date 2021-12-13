@@ -12,7 +12,8 @@ class PlayerManager:
         """Create a new model player"""
         specifications_new_player = self.player_view.new_player()
         player =  p(specifications_new_player)
-        print(self.database.serialize_to_json(player))
+        serialize_player = self.database.serialize_to_json(player)
+        self.database.insert_into_db('player', serialize_player)
 
     def add_player(self) -> object:
         """Create a new player or get a player in Database"""
