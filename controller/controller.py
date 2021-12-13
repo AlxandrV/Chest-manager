@@ -4,15 +4,19 @@ from controller.playerManager import PlayerManager as pm
 
 class Controller:
 
+    def __init__(self) -> None:
+        self.tournament_manager = tm()
+        self.player_manager = pm()
+
     def run(self):
         self.main()
 
     def main(self):
-        # view = v()
-        # switch_choice(view)
+        view = v()
+        self.switch_choice(view)
 
-        player = pm()
-        self.create_player(player)
+        # player = pm()
+        # self.create_player(player)
 
         # tournament = tm()
         # self.create_tournament(tournament)
@@ -32,9 +36,9 @@ class Controller:
             print("\nCe choix n'est pas dans la iste !\n")
             self.switch_choice(view_object)
 
-    def create_tournament(self,tournament_manager):
+    def create_tournament(self):
         """Create a new tournament"""
-        tournament_manager.new_tournament()
+        self.tournament_manager.new_tournament()
 
     def create_player(self, player_manager):
         """Create a new player"""
