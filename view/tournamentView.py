@@ -13,23 +13,23 @@ class TournamentView:
         name = self.name()
         specifications['name'] = name
 
-        # place = self.place()
-        # specifications['place'] = place
+        place = self.place()
+        specifications['place'] = place
 
-        # date_start = self.date_start()
-        # specifications['date_start'] = date_start
+        date_start = self.date_start()
+        specifications['date_start'] = date_start
 
-        # date_end = self.date_end()
-        # specifications['date_end'] = date_end
+        date_end = self.date_end()
+        specifications['date_end'] = date_end
 
-        # stage = self.stage()
-        # specifications['stage'] = stage
+        stage = self.stage()
+        specifications['stage'] = stage
 
-        # time_control = self.time_control()
-        # specifications['time_control'] = time_control
+        time_control = self.time_control()
+        specifications['time_control'] = time_control
 
-        # description = self.description()
-        # specifications['description'] = description
+        description = self.description()
+        specifications['description'] = description
 
         number_players = self.number_players()
         specifications['number_players'] = number_players

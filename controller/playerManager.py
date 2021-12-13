@@ -9,7 +9,6 @@ class PlayerManager:
     def new_player(self) -> object:
         """Create a new model player"""
         specifications_new_player = self.player_view.new_player()
-        specifications_new_player['ranking'] = input("Rang : ")
         return p(specifications_new_player)
 
     def add_player(self) -> object:

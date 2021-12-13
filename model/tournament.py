@@ -3,11 +3,11 @@ from datetime import datetime
 class Tournament:
     
     def __init__(self) -> None:
-        # self._set_name()
-        # self._set_place()
-        # self._set_date_start()
-        # self._set_date_end()
-        # self._set_turn()
+        self._set_name()
+        self._set_place()
+        self._set_date_start()
+        self._set_date_end()
+        self._set_turn()
         self._set_time_control()
         self._set_description()
 

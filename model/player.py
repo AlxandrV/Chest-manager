@@ -5,7 +5,7 @@ class Player:
     def __init__(self, specification) -> None:
         self._set_name(specification['name'])
         self._set_last_name(specification['lastname'])
-        # self._set_birthday(specification['birthday'])
+        self._set_birthday(specification['birthday'])
         self._set_ranking(specification['ranking'])
 
     def _set_name(self, name) -> None:
@@ -43,7 +43,7 @@ class Player:
         try:
             self._gender = int(gender)
         except ValueError as e:
-            print("Valeur incorrect !\n")
+            print("Valeur du genre incorrect !\n")
 
     def get_gender(self) -> int:
         """Getter gender"""
@@ -51,7 +51,14 @@ class Player:
 
     def _set_ranking(self, ranking) -> None:
         """Setter ranking"""
-        self._ranking = int(ranking)
+        if not ranking:
+            self._ranking = 0
+        else:
+            try:
+                self._turn = int(ranking)
+            except ValueError as e:
+                print("Valeur du rang incorrect\n")
+                self._ranking = 0
 
     def get_ranking(self) -> int:
         """Getter ranking"""
