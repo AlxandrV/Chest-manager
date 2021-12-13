@@ -17,4 +17,4 @@ class DatabaseManager:
         return json.loads(json.dumps(model, default=lambda o: o.__dict__))
 
     def last_insert(self, table):
-        print(self._db.search(table, 2))
+        print(self._db.last_insert(table))

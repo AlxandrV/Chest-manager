@@ -20,3 +20,12 @@ class Database:
 
     def update(self):
         pass
+
+    def last_insert(self, table_name):
+        """Return id of the last insert in table"""
+        table_result = self._db.table(table_name)
+        max_id = False
+        for result in table_result:
+            if result.doc_id > max_id:
+                max_id = result.doc_id
+        return max_id
