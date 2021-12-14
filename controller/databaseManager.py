@@ -19,3 +19,8 @@ class DatabaseManager:
     def last_insert(self, table):
         """Return id of the last insert in table"""
         return self._db.last_insert(table)
+
+    def search_multiple(self, table_name, index_start):
+        data_table = self._db.search_table(table_name)
+        
+        return self._db.search_more(data_table, index_start)

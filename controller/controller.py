@@ -15,12 +15,6 @@ class Controller:
         view = v()
         self.switch_choice(view)
 
-        # player = pm()
-        # self.create_player(player)
-
-        # tournament = tm()
-        # self.create_tournament(tournament)
-
     def switch_choice(self,view_object):
         """List of interactions choices"""
         view_object.list_choice()
@@ -29,7 +23,7 @@ class Controller:
         if choice == 1:
             self.create_tournament()
         elif choice == 2:
-            pass
+            self.list_tournament()
         elif choice == 3:
             pass
         else:
@@ -43,3 +37,7 @@ class Controller:
     def create_player(self, player_manager):
         """Create a new player"""
         player_manager.new_player()
+
+    def list_tournament(self):
+        """List of tournaments"""
+        self.tournament_manager.list_tournament()

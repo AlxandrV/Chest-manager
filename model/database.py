@@ -11,9 +11,16 @@ class Database:
         """Insert into table in database"""
         self._db.table(table).insert(to_insert)
 
-    def search(self, table_name, id_value):
-        table_result = self._db.table(table_name)
-        return table_result.get(doc_id=id_value)
+    def search_table(self, table_name):
+        """Search and retun a table in database"""
+        return self._db.table(table_name)
+
+    def search_single(self, table_name, id_value):
+        """Search and return a single value by id"""
+        return table_name.get(doc_id=id_value)
+
+    def search_more(self, table_name, index_start, limit=10):
+        return table_name.all()[index_start:limit]
 
     def delete(self):
         pass

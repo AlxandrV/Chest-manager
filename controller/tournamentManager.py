@@ -29,3 +29,7 @@ class TournamentManager:
         self.database_manager.insert_into_db('tournament', new_tournament)
         # sorted_list_players = self.player_manager.sorted_players(list_players)
         
+    def list_tournament(self) -> None:
+        """List of tournaments"""
+        list_tournament = self.database_manager.search_multiple('tournament', 0)
+        
