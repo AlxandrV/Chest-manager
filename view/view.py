@@ -15,3 +15,6 @@ class View:
         
     def input(self, string_to_input) -> str:
         return input(string_to_input)
+
+    def print_to_user(self, string_to_print) -> None:
+        print(string_to_print)

@@ -12,21 +12,20 @@ class TournamentManager:
     
     def new_tournament(self) -> None:
         """Creat a new tournament"""
-        # specifications_new_tournament = self.tournament_view.new_tournament()
+        specifications_new_tournament = self.tournament_view.new_tournament()
 
-        # new_tournament = t(specifications_new_tournament)
+        create_players = self.tournament_view.create_players()
 
-        # self.database_manager.insert_into_db('tournament', new_tournament)
+        if create_players == 1:
+            list_id_players = []
 
-        # self.database_manager.last_insert('tournament')
+            for player in range(specifications_new_tournament['number_players']):
+                new_player = self.player_manager.add_player()
+                list_id_players.append(self.database_manager.last_insert('player'))
 
-        # list_players = []
+            specifications_new_tournament['list_players'] = list_id_players
 
-        # for player in range(new_tournament['number_players']):
-        #     list_players.append(self.player_manager.add_player())
-
-        # new_tournament['list_players'] = list_players
+        new_tournament = t(specifications_new_tournament)
+        self.database_manager.insert_into_db('tournament', new_tournament)
         # sorted_list_players = self.player_manager.sorted_players(list_players)
-
-        # self.database_manager.add_tournament(new_tournament)
         

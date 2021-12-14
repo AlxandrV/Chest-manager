@@ -8,6 +8,7 @@ class TournamentView:
         self.view = v()
     
     def new_tournament(self) -> dict:
+        self.view.print_to_user("Création d'un nouveau tournoi !")
         specifications = {}
 
         name = self.name()
@@ -51,7 +52,7 @@ class TournamentView:
             return date_start
             
         except ValueError as e:
-            print("Format de date incorrect !\n")
+            self.view.print_to_user("Format de date incorrect !\n")
             return self.date_start()
 
 
@@ -64,7 +65,7 @@ class TournamentView:
             return date_end
 
         except ValueError as e:
-            print("Format de date incorrect !\n")
+            self.view.print_to_user("Format de date incorrect !\n")
             return self.date_end()
 
     
@@ -77,14 +78,14 @@ class TournamentView:
         else:
             try:
                 if number_stage < 1:
-                    print("Le nombre de tours minimum est de 1 !")
+                    self.view.print_to_user("Le nombre de tours minimum est de 1 !")
                     return self.stage()
                 
                 else:
                     return int(stage)
 
             except ValueError as e:
-                print("Rentrer un nombre !\n")
+                self.view.print_to_user("Rentrer un nombre !\n")
                 return self.stage()
 
     def time_control(self) -> int:
@@ -100,11 +101,11 @@ class TournamentView:
                 return time_control
 
             else:
-                print("Rentrer un nombre dans liste !")
+                self.view.print_to_user("Rentrer un nombre dans liste !")
                 return self.time_control()
 
         except ValueError as e:
-                print("Rentrer un nombre !")
+                self.view.print_to_user("Rentrer un nombre !")
                 return self.time_control()
 
     def description(self) -> str:
@@ -121,16 +122,35 @@ class TournamentView:
                 players = int(players)
 
                 if players < 2:
-                    print("Le tournoi doit comporter au moins 2 joueurs !")
+                    self.view.print_to_user("Le tournoi doit comporter au moins 2 joueurs !")
                     return self.number_players()
 
                 elif players >= 0 and (players % 2) != 0 :
-                    print("Le nombre de joueurs doit être paire !")
+                    self.view.print_to_user("Le nombre de joueurs doit être paire !")
                     return self.number_players()
 
                 else:
                     return players
 
             except ValueError as e:
-                print("Renseigner un nombre !")
+                self.view.print_to_user("Renseigner un nombre !")
                 return self.number_players()
+
+    def create_players(self) -> int:
+        create_or_not = self.view.input("Voulez-vous jouter les joueurs maintenant ?\n"
+            "1 : Oui\n"
+            "2 : Non\n"
+            "\nChoix : ")
+
+        try:
+            create_or_not = int(create_or_not)
+            if create_or_not == 1 or create_or_not == 2:
+                return create_or_not
+
+            else:
+                self.view.print_to_user("Veuillez choisir un nombre dans la liste !")
+                return self.create_players()
+
+        except ValueError as e:
+                self.view.print_to_user("Veuillez choisir un nombre dans la liste !")
+                return self.create_players()
