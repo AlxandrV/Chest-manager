@@ -10,31 +10,14 @@ class TournamentView:
     def new_tournament(self) -> dict:
         self.view.print_to_user("Création d'un nouveau tournoi !")
         specifications = {}
-
-        name = self.name()
-        specifications['name'] = name
-
-        place = self.place()
-        specifications['place'] = place
-
-        date_start = self.date_start()
-        specifications['date_start'] = date_start
-
-        date_end = self.date_end()
-        specifications['date_end'] = date_end
-
-        stage = self.stage()
-        specifications['stage'] = stage
-
-        time_control = self.time_control()
-        specifications['time_control'] = time_control
-
-        description = self.description()
-        specifications['description'] = description
-
-        number_players = self.number_players()
-        specifications['number_players'] = number_players
-
+        specifications['_name'] = self.name()
+        specifications['_place'] = self.place()
+        specifications['_date_start'] = self.date_start()
+        specifications['_date_end'] = self.date_end()
+        specifications['_stage'] = self.stage()
+        specifications['_time_control'] = self.time_control()
+        specifications['_description'] = self.description()
+        specifications['_number_players'] = self.number_players()
         return specifications
 
     def name(self) -> str:
@@ -154,3 +137,6 @@ class TournamentView:
         except ValueError as e:
                 self.view.print_to_user("Veuillez choisir un nombre dans la liste !")
                 return self.create_players()
+
+    def get_tournament(self, tournaments) -> None:
+        self.view.print_to_user(tournaments)

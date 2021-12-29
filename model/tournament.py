@@ -3,14 +3,24 @@ from datetime import datetime
 class Tournament:
     
     def __init__(self, specification) -> None:
-        self._set_name(specification['name'])
-        self._set_place(specification['place'])
-        self._set_date_start(specification['date_start'])
-        self._set_date_end(specification['date_end'])
+        if specification['_id']:
+            self._set_id(specification['_id'])
+
+        self._set_name(specification['_name'])
+        self._set_place(specification['_place'])
+        self._set_date_start(specification['_date_start'])
+        self._set_date_end(specification['_date_end'])
         # self._set_turn(specification['name'])
-        self._set_time_control(specification['time_control'])
-        self._set_description(specification['description'])
-        self._set_number_players(specification['number_players'])
+        self._set_time_control(specification['_time_control'])
+        self._set_description(specification['_description'])
+        self._set_number_players(specification['_number_players'])
+
+    def _set_id(self, id) -> None:
+        self._id = int(id)
+
+    def get_id(self) -> str:
+        return self._id
+
 
     def _set_name(self, name) -> None:
         self._name = str(name)

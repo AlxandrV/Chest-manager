@@ -1,3 +1,7 @@
+import json
+
+from prettytable import PrettyTable
+
 from model.tournament import Tournament as t
 from controller.databaseManager import DatabaseManager as dbm
 from view.tournamentView import TournamentView as tv
@@ -32,4 +36,16 @@ class TournamentManager:
     def list_tournament(self) -> None:
         """List of tournaments"""
         list_tournament = self.database_manager.search_multiple('tournament', 0)
+
+        table_list_tournament = PrettyTable(["ID", "Nom", "Lieu", "Date début", "Date fin"])
         
+        for element in list_tournament:
+            tournament = self.hydrate_object_with_json(element)
+            self.tournament_view.get_tournament(tournament)
+            table_list_tournament.add_row([tournament._id, tournament._name, tournament._place, tournament._date_start, tournament._date_end])
+
+        self.tournament_view.get_tournament(table_list_tournament)
+
+    def hydrate_object_with_json(self, json_to_hydrate):
+        # print(json_to_hydrate)
+        return json.loads(json_to_hydrate, object_hook=t)
