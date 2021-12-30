@@ -140,3 +140,17 @@ class TournamentView:
 
     def get_tournament(self, tournaments) -> None:
         self.view.print_to_user(tournaments)
+
+    def launch_tournament(self) -> None:
+        id_tournament = self.view.input("Renseigner l'ID du tournoi à lancer : ")
+
+        try:
+            return int(id_tournament)
+    
+        except ValueError as e:
+            self.view.print_to_user("Rentrer un nombre !")
+            return self.launch_tournament()
+
+    def except_value(self, string_to_except):
+        self.view.print_to_user(string_to_except)
+        

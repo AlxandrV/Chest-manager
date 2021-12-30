@@ -21,11 +21,18 @@ class DatabaseManager:
         return json.loads(json.dumps(model, default=lambda o: o.__dict__))
 
     def serialize_to_json(self, string_to_single_quote):
+        """Convert JSON single quote to JSON double quote"""
         return json.dumps(string_to_single_quote)
 
     def last_insert(self, table):
         """Return id of the last insert in table"""
         return self._db.last_insert(table)
+
+    def search_single(self, table_name, id_to_search):
+        """Return a unique value"""
+        datas_table = self._db.search_table(table_name)
+        data = self._db.search_single(datas_table, id_to_search)
+        return self.serialize_to_json(data)
 
     def search_multiple(self, table_name, index_start):
         """Return a list in table from an start index"""

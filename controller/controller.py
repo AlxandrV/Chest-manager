@@ -7,13 +7,13 @@ class Controller:
     def __init__(self) -> None:
         self.tournament_manager = tm()
         self.player_manager = pm()
+        self._view = v()
 
     def run(self):
         self.main()
 
     def main(self):
-        view = v()
-        self.switch_choice(view)
+        self.switch_choice(self._view)
 
     def switch_choice(self,view_object):
         """List of interactions choices"""
@@ -23,8 +23,10 @@ class Controller:
         if choice == 1:
             self.create_tournament()
         elif choice == 2:
-            self.list_tournament()
+            self.launch_tournament()
         elif choice == 3:
+            self.list_tournament()
+        elif choice == 4:
             pass
         else:
             print("\nCe choix n'est pas dans la iste !\n")
@@ -41,3 +43,9 @@ class Controller:
     def list_tournament(self):
         """List of tournaments"""
         self.tournament_manager.list_tournament()
+    
+    def launch_tournament(self):
+        """Launch a tournament"""
+        bool_result = self.tournament_manager.launch_tournament()
+        if bool_result == False:
+            self.main()

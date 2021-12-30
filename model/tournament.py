@@ -3,9 +3,8 @@ from datetime import datetime
 class Tournament:
     
     def __init__(self, specification) -> None:
-        if specification['_id']:
+        if '_id' in specification:
             self._set_id(specification['_id'])
-
         self._set_name(specification['_name'])
         self._set_place(specification['_place'])
         self._set_date_start(specification['_date_start'])
@@ -14,13 +13,15 @@ class Tournament:
         self._set_time_control(specification['_time_control'])
         self._set_description(specification['_description'])
         self._set_number_players(specification['_number_players'])
+        if '_list_players' in specification:
+            self._set_list_players(specification['_list_players'])
+
 
     def _set_id(self, id) -> None:
         self._id = int(id)
 
     def get_id(self) -> str:
         return self._id
-
 
     def _set_name(self, name) -> None:
         self._name = str(name)
@@ -69,11 +70,11 @@ class Tournament:
     def get_turn(self) -> int:
         return self._turn
 
-    def _set_instance(self) -> None:
-        self._instance = False
+    # def _set_instance(self) -> None:
+    #     self._instance = False
     
-    def get_instance(self) -> bool:
-        return self._instance
+    # def get_instance(self) -> bool:
+    #     return self._instance
 
     def _set_players(self, players_id) -> None:
         self._players_id = list(players_id)
@@ -93,5 +94,8 @@ class Tournament:
     def get_description(self) -> str:
         return self._description
 
-    def _set_number_players(self, number_players):
+    def _set_number_players(self, number_players) -> None:
         self._number_players = int(number_players)
+
+    def _set_list_players(self, list_players):
+        self._list_players = list(list_players)
