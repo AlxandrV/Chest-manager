@@ -41,9 +41,14 @@ class TournamentManager:
         
         for element in list_tournament:
             tournament = self.hydrate_object_with_json(element)
-            table_list_tournament.add_row([tournament._id, tournament._name, tournament._place, tournament._date_start, tournament._date_end])
+            table_list_tournament.add_row([
+                tournament._id, 
+                tournament._name, 
+                tournament._place, 
+                tournament._date_start, 
+                tournament._date_end])
 
-        self.tournament_view.get_tournament(table_list_tournament)
+        self.tournament_view.except_value(table_list_tournament)
 
     def launch_tournament(self) -> None:
         id_tournament_to_launch = self.tournament_view.launch_tournament()
@@ -56,7 +61,11 @@ class TournamentManager:
         tournament_object = self.hydrate_object_with_json(tournament)
 
         if self.has_attribute(tournament_object, '_list_players') == False:
-            print('pas de joueurs')
+            self.tournament_view.except_value(
+                "\nPas de joueurs enregistré pour ce tournoi !\n"
+                "Veuillez en ajouter :")
+            list_players = self.add_list_players(tournament_object._number_players)
+            print(list_players)
 
     def hydrate_object_with_json(self, json_to_hydrate):
         return json.loads(json_to_hydrate, object_hook=t)
@@ -66,3 +75,12 @@ class TournamentManager:
             return True
         else:
             return False
+
+    def add_list_players(self, number_to_range):
+        list_id_players = []
+
+        for player in range(number_to_range):
+            new_player = self.player_manager.add_player()
+            list_id_players.append(new_player)
+
+        return list_id_players

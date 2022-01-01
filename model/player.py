@@ -3,10 +3,19 @@ from datetime import datetime
 class Player:
     
     def __init__(self, specification) -> None:
-        self._set_name(specification['name'])
-        self._set_last_name(specification['lastname'])
-        self._set_birthday(specification['birthday'])
-        self._set_ranking(specification['ranking'])
+        if '_id' in specification:
+            self._set_id(specification['_id'])
+        self._set_name(specification['_name'])
+        self._set_last_name(specification['_last_name'])
+        self._set_birthday(specification['_birthday'])
+        self._set_ranking(specification['_ranking'])
+
+    def _set_id(self, id) -> None:
+        self._id = int(id)
+
+    def get_id(self) -> str:
+        return self._id
+
 
     def _set_name(self, name) -> None:
         """Setter name"""

@@ -84,4 +84,12 @@ class PlayerView:
             print(f"Veuillez choisir un nombre dans la liste !")
             return self.gender()
 
+    def select_player(self, string_to_input="ID du joueur : "):
+        try:
+            return int(self.view.input(string_to_input))
+        except ValueError as e:
+            self.view.print_to_user("Saisissez un nombre !")
+            return self.select_player()
 
+    def except_value(self, string_to_except):
+        self.view.print_to_user(string_to_except)

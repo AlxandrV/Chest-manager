@@ -138,9 +138,6 @@ class TournamentView:
                 self.view.print_to_user("Veuillez choisir un nombre dans la liste !")
                 return self.create_players()
 
-    def get_tournament(self, tournaments) -> None:
-        self.view.print_to_user(tournaments)
-
     def launch_tournament(self) -> None:
         id_tournament = self.view.input("Renseigner l'ID du tournoi à lancer : ")
 
