@@ -29,7 +29,7 @@ class Controller:
         elif choice == 4:
             print("Liste des joueurs à venir...")
         elif choice == 5:
-            self.launch_tournament()
+            self.launch_stage_tournament()
         elif choice == 6:
             self.close_stage()
         else:
@@ -50,9 +50,9 @@ class Controller:
         """List of tournaments"""
         self.tournament_manager.list_tournament()
     
-    def launch_tournament(self):
+    def launch_stage_tournament(self):
         """Launch a tournament"""
-        bool_result = self.tournament_manager.launch_tournament()
+        bool_result = self.tournament_manager.launch_stage_tournament()
         if bool_result == False:
             self.main()
 
