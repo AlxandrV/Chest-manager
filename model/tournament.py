@@ -2,19 +2,23 @@ from datetime import datetime
 
 class Tournament:
     
-    def __init__(self, specification) -> None:
-        if '_id' in specification:
-            self._set_id(specification['_id'])
-        self._set_name(specification['_name'])
-        self._set_place(specification['_place'])
-        self._set_date_start(specification['_date_start'])
-        self._set_date_end(specification['_date_end'])
-        # self._set_turn(specification['name'])
-        self._set_time_control(specification['_time_control'])
-        self._set_description(specification['_description'])
-        self._set_number_players(specification['_number_players'])
-        if '_list_players' in specification:
-            self._set_list_players(specification['_list_players'])
+    def __init__(self, specifications) -> None:
+        if '_id' in specifications:
+            self._set_id(specifications['_id'])
+        self._set_name(specifications['_name'])
+        self._set_place(specifications['_place'])
+        self._set_date_start(specifications['_date_start'])
+        self._set_date_end(specifications['_date_end'])
+        self._set_stage(specifications['_id_stage'])
+        self._set_time_control(specifications['_time_control'])
+        self._set_description(specifications['_description'])
+        self._set_number_players(specifications['_number_players'])
+        if '_list_players' in specifications:
+            self._set_list_players(specifications['_list_players'])
+        if '_status' in specifications:
+            self._status = specifications['_status']
+        else:
+            self.status = False
 
 
     def _set_id(self, id) -> None:
@@ -61,14 +65,14 @@ class Tournament:
     def get_date_end(self) -> str:
         return self._date_end
 
-    def _set_turn(self, turn) -> None:
+    def _set_stage(self, turn) -> None:
         try:
-            self._turn = list(turn)
+            self._id_stage = list(turn)
         except ValueError as e:
-            print("Format destours incorrect !\n")
+            print("Format des tours incorrect !\n")
 
-    def get_turn(self) -> int:
-        return self._turn
+    def get_stage(self) -> int:
+        return self._id_stage
 
     # def _set_instance(self) -> None:
     #     self._instance = False

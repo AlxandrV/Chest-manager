@@ -120,7 +120,7 @@ class TournamentView:
                 return self.number_players()
 
     def create_players(self) -> int:
-        create_or_not = self.view.input("Voulez-vous jouter les joueurs maintenant ?\n"
+        create_or_not = self.view.input("Voulez-vous ajouter les joueurs maintenant ?\n"
             "1 : Oui\n"
             "2 : Non\n"
             "\nChoix : ")

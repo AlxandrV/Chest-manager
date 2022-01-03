@@ -10,12 +10,13 @@ class PlayerManager:
     def __init__(self) -> None:
         self.player_view = pv()
         self.database_manager = dm()
+        self.TABLE_NAME = "player"
 
     def new_player(self) -> object:
         """Create a new model player"""
         specifications_new_player = self.player_view.new_player()
         player =  p(specifications_new_player)
-        self.database_manager.insert_into_db('player', player)
+        self.database_manager.insert_into_db(self.TABLE_NAME, player)
 
     def add_player(self) -> object:
         """Create a new player or get a player in Database"""
@@ -25,7 +26,7 @@ class PlayerManager:
             return self.new_player()
 
         elif statut_player == 2:
-            list_players = self.database_manager.search_multiple('player', 0)
+            list_players = self.database_manager.search_multiple(self.TABLE_NAME, 0)
             table_list_players = PrettyTable(["ID", "Prénom", "Nom", "Date de naissance"])
         
             for element in list_players:
@@ -44,7 +45,13 @@ class PlayerManager:
 
     def sorted_players(self, list_players) -> list:
         """Sorted list of players by ranking"""
-        return sorted(list_players, key=lambda player: player.get_ranking())
+        # for player in list_players:
+        #     print(player._name)
+        return sorted(list_players, key=lambda player: player._ranking)
 
     def hydrate_object_with_json(self, json_to_hydrate):
         return json.loads(json_to_hydrate, object_hook=p)
+
+    def hydrate_object_by_id(self, id_player):
+        json_player = self.database_manager.search_single(self.TABLE_NAME, id_player)
+        return self.hydrate_object_with_json(json_player)

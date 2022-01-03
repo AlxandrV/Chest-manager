@@ -1,4 +1,4 @@
-from tinydb import TinyDB, Query, table
+from tinydb import TinyDB, Query, table, where
 import os
 
 from tinydb.utils import T
@@ -22,7 +22,12 @@ class Database:
         return datas_table.get(doc_id=id_value)
 
     def search_more(self, datas_table, index_start, limit=10):
+        """Search and return a multiple values"""
         return datas_table.all()[index_start:limit]
+
+    def search_where(self, datas_table, key, value):
+        """Search and return by condition"""
+        return datas_table.search(where(key) == value)
 
     def delete(self):
         pass

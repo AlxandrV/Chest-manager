@@ -7,6 +7,7 @@ class Player:
             self._set_id(specification['_id'])
         self._set_name(specification['_name'])
         self._set_last_name(specification['_last_name'])
+        self._set_gender(specification['_gender'])
         self._set_birthday(specification['_birthday'])
         self._set_ranking(specification['_ranking'])
 
@@ -64,7 +65,7 @@ class Player:
             self._ranking = 0
         else:
             try:
-                self._turn = int(ranking)
+                self._ranking = int(ranking)
             except ValueError as e:
                 print("Valeur du rang incorrect\n")
                 self._ranking = 0

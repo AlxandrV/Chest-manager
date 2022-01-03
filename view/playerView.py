@@ -12,18 +12,18 @@ class PlayerView:
         specifications = {}
 
         name = self.name()
-        specifications['name'] = name
+        specifications['_name'] = name
 
         lastname = self.lastname()
-        specifications['lastname'] = lastname
+        specifications['_lastname'] = lastname
 
         birthday = self.birthday()
-        specifications['birthday'] = birthday
+        specifications['_birthday'] = birthday
 
         gender = self.gender()
-        specifications['gender'] = gender
+        specifications['_gender'] = gender
 
-        specifications['ranking'] = 0
+        specifications['_ranking'] = 0
 
         return specifications
 

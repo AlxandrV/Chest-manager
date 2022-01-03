@@ -35,6 +35,7 @@ class Controller:
     def create_tournament(self):
         """Create a new tournament"""
         self.tournament_manager.new_tournament()
+        self.switch_choice()
 
     def create_player(self, player_manager):
         """Create a new player"""

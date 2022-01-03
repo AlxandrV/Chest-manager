@@ -37,8 +37,14 @@ class DatabaseManager:
     def search_multiple(self, table_name, index_start):
         """Return a list in table from an start index"""
         data_table = self._db.search_table(table_name)
-        
+    
         datas = self._db.search_more(data_table, index_start)
+        return [self.serialize_to_json(data) for data in datas]
+
+    def search_where(self, table_name, key, value):
+        """Return a list of value search by condition"""
+        data_table = self._db.search_table(table_name)
+        datas = self._db.search_where(data_table, key, value)
         return [self.serialize_to_json(data) for data in datas]
 
     def update(self, table_name, id_index, data_to_update):
