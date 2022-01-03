@@ -5,9 +5,11 @@ class View:
             input_choice = int(input(
                 "Que voulez-vous faire :\n"
                 "1 : Créer un nouveau tournoi\n"
-                "2 : Lancer un tournoi\n"
-                "3 : Consulter la liste des tournois déjà joués\n"
+                "2 : Créer un nouveau joueur\n"
+                "3 : Consulter la liste de tous les tournois\n"
                 "4 : Consulter la liste des joueurs\n"
+                "5 : Lancer le tour d'un tournoi\n"
+                "6 : Terminer le tour d'un tournoi et rentrer les résultats\n"
                 "\nChoix : "))
             self.choice = input_choice
 

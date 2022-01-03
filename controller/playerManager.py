@@ -43,6 +43,15 @@ class PlayerManager:
             self.player_view.except_value(f"{player_to_add._name} {player_to_add._last_name} ajouté au tournoi !\n")
             return player_to_add
 
+    def list_players(self, number_to_range):
+        """Return a list players object"""
+        list_id_players = []
+        for player in range(number_to_range):
+            new_player = self.player_manager.add_player()
+            list_id_players.append(new_player)
+        return list_id_players
+
+
     def sorted_players(self, list_players) -> list:
         """Sorted list of players by ranking"""
         # for player in list_players:

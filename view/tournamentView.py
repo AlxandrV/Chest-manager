@@ -1,4 +1,6 @@
 from datetime import datetime
+from prettytable import PrettyTable
+
 
 from view.view import View as v
 
@@ -147,6 +149,37 @@ class TournamentView:
         except ValueError as e:
             self.view.print_to_user("Rentrer un nombre !")
             return self.launch_tournament()
+
+    def print_list_tournament(self, list_tournament):
+        table_list_tournament = PrettyTable(["ID", "Nom", "Lieu", "Date début", "Date fin", "Contrôle du temps", "Status"])
+        
+        for element in list_tournament:
+            if element._time_control == 1:
+                time_control = "Bullet"
+            elif element._time_control == 2:
+                time_control = "Blitz"
+            elif element._time_control == 3:
+                time_control == "Coup rapide"
+            else:
+                time_control = "Error"
+
+            if element._status == 0:
+                status = "Non joué"
+            elif element._status == 1:
+                status = "En cours"
+            else:
+                status = "Déjà joué"
+
+            table_list_tournament.add_row([
+                element._id, 
+                element._name, 
+                element._place, 
+                element._date_start, 
+                element._date_end,
+                time_control,
+                status])
+
+        self.except_value(table_list_tournament)   
 
     def except_value(self, string_to_except):
         self.view.print_to_user(string_to_except)

@@ -1,7 +1,4 @@
-from datetime import time
 import json
-
-from prettytable import PrettyTable
 
 from controller.stageManager import StageManager as sm
 from model.tournament import Tournament as t
@@ -29,7 +26,7 @@ class TournamentManager:
         create_players = self.tournament_view.create_players()
 
         if create_players == 1:
-            list_players_object = self.add_list_players(specifications_new_tournament['_number_players'])
+            list_players_object = self.player_manager.list_players(specifications_new_tournament['_number_players'])
             list_players_id = [id_player._id for id_player in list_players_object]
 
             specifications_new_tournament['_list_players'] = list_players_id
@@ -38,7 +35,6 @@ class TournamentManager:
         self.database_manager.insert_into_db(self.TABLE_NAME, new_tournament)
 
         self.tournament_view.except_value("\nNouveau tournoi créé !\n")
-        # sorted_list_players = self.player_manager.sorted_players(list_players)
         
     def list_tournament(self) -> None:
         """List of tournaments"""
@@ -46,17 +42,12 @@ class TournamentManager:
         list_tournament_object = []
         for tournament in list_tournament:
             list_tournament_object.append(self.hydrate_object_with_json(tournament))
-        self.print_list_tournament(list_tournament_object)
+        self.tournament_view.print_list_tournament(list_tournament_object)
 
 
     def launch_tournament(self) -> None:
         """List a tournament in progress and launch"""
-        tournament_in_progress = self.database_manager.search_where(self.TABLE_NAME, '_status', False)
-        list_tournament_in_progress = []
-        for tournament in tournament_in_progress:
-            list_tournament_in_progress.append(self.hydrate_object_with_json(tournament))
-        self.print_list_tournament(list_tournament_in_progress)
-
+        list_tournament_in_progress = self.get_status_of_tournament(0)
         id_tournament_to_launch = self.tournament_view.launch_tournament()
 
         if id_tournament_to_launch in [tournament._id for tournament in list_tournament_in_progress]:
@@ -67,6 +58,19 @@ class TournamentManager:
         else:
             self.tournament_view.except_value("ID incorrect")
             self.launch_tournament()
+        
+    def close_stage_of_tournament(self):
+        list_tournament_in_progress = self.get_status_of_tournament(1)
+
+
+    def get_status_of_tournament(self, status):
+        """Return a list of tournaments by status"""
+        tournament_status = self.database_manager.search_where(self.TABLE_NAME, '_status', status)
+        tournament_status_object = []
+        for tournament in tournament_status:
+            tournament_status_object.append(self.hydrate_object_with_json(tournament))
+        self.tournament_view.print_list_tournament(tournament_status_object)
+        return tournament_status_object
 
     def tournament_to_launch(self, tournament):
         """Launch a tournament"""
@@ -74,19 +78,23 @@ class TournamentManager:
             self.tournament_view.except_value(
                 "\nPas de joueurs enregistré pour ce tournoi !\n"
                 "Veuillez en ajouter :")
-            list_players_object = self.add_list_players(tournament._number_players)
+            list_players_object = self.player_manager.list_players(tournament._number_players)
             list_players_id = [id_player._id for id_player in list_players_object]
             setattr(tournament, '_list_players', list_players_id)
             self.update_tournament_db(tournament, tournament._id)
-
         else:
             list_players_object = self.hydrate_list_players(tournament._list_players)
 
         sorted_id_stage = sorted(tournament._id_stage)
         for stage in sorted_id_stage:
-            stage = self.stage_manager.launch_stage(stage, list_players_object)
-            if stage != None:
+            stage = self.stage_manager.launch_stage(stage)
+            if stage._status == 1:
+                self.tournament_view.except_value(f"\nVeuillez mettre fin au tour n°{stage._number} du tournoi {stage._id}, avant d'en lancer un nouveau !\n")
+                break
+            elif stage._status == 0:
                 self.stage_manager.stage_to_launch(stage, list_players_object)
+                tournament._status = 1
+                self.update_tournament_db(tournament, tournament._id)
                 break
 
     def hydrate_object_with_json(self, json_to_hydrate):
@@ -101,49 +109,13 @@ class TournamentManager:
         return list_players
 
     def has_attribute(self, object_with_attr, nam_attr):
+        """Verify is has attribute"""
         if hasattr(object_with_attr, nam_attr):
             return True
         else:
             return False
 
-    def add_list_players(self, number_to_range):
-        """Return a list players object"""
-        list_id_players = []
-        for player in range(number_to_range):
-            new_player = self.player_manager.add_player()
-            list_id_players.append(new_player)
-        return list_id_players
-
     def update_tournament_db(self, object_to_update, id_to_object):
         """Update a tournament in database"""
         datas_serialize = self.database_manager.serialize_object_to_json(object_to_update)
         self.database_manager.update(self.TABLE_NAME, id_to_object, datas_serialize)
-
-    def print_list_tournament(self, list_tournament):
-        table_list_tournament = PrettyTable(["ID", "Nom", "Lieu", "Date début", "Date fin", "Contrôle du temps", "Status"])
-        
-        for element in list_tournament:
-            if element._time_control == 1:
-                time_control = "Bullet"
-            elif element._time_control == 2:
-                time_control = "Blitz"
-            elif element._time_control == 3:
-                time_control == "Coup rapide"
-            else:
-                time_control = "Error"
-
-            if element._status == False:
-                status = "En cours"
-            else:
-                status = "Déjà joué"
-
-            table_list_tournament.add_row([
-                element._id, 
-                element._name, 
-                element._place, 
-                element._date_start, 
-                element._date_end,
-                time_control,
-                status])
-
-        self.tournament_view.except_value(table_list_tournament)

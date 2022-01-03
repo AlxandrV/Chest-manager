@@ -9,4 +9,4 @@ class Stage:
         if '_status' in specifications:
             self._status = specifications['_status']
         else:
-            self.status = False
+            self.status = 0
