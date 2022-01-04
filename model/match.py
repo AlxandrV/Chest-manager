@@ -1,14 +1,13 @@
 class Match:
 
-    def __init__(self, stage_number, match_number, list_two_players, player_winner=None) -> None:
-        self._set_stage_number(stage_number)
-        self._set_match_number(match_number)
-        self._set_players(list_two_players)
-
-        if player_winner != None:
-            self.set_player_winner()
-        else:
-            self.player_winner = player_winner
+    def __init__(self, specifications) -> None:
+        if '_id' in specifications:
+            self._id = specifications['_id']
+        self._number = specifications['_number']
+        self._id_stage = specifications['_id_stage']
+        self._id_players = specifications['_id_players']
+        if '_id_winner' in specifications:
+            self._id_winner = specifications['_id_winner']
 
     def set_player_winner(self, player_winner):
         self.player_winner = player_winner

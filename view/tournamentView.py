@@ -150,8 +150,8 @@ class TournamentView:
             self.view.print_to_user("Rentrer un nombre !")
             return self.launch_stage_tournament()
 
-    def print_list_tournament(self, list_tournament):
-        table_list_tournament = PrettyTable(["ID", "Nom", "Lieu", "Date début", "Date fin", "Contrôle du temps", "Status"])
+    def print_list_tournament_in_progess(self, list_tournament):
+        table_list_tournament = PrettyTable(["ID", "Nom", "Lieu", "Date début", "Date fin", "Contrôle du temps", "Status", "Round joué"])
         
         for element in list_tournament:
             if element._time_control == 1:
@@ -177,9 +177,12 @@ class TournamentView:
                 element._date_start, 
                 element._date_end,
                 time_control,
-                status])
+                status,
+                element._stage_in_progress])
 
         self.except_value(table_list_tournament)   
+
+
 
     def except_value(self, string_to_except):
         self.view.print_to_user(string_to_except)

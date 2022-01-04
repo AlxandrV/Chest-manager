@@ -65,11 +65,11 @@ class Player:
             self._ranking = 0
         else:
             try:
-                self._ranking = int(ranking)
+                self._ranking = float(ranking)
             except ValueError as e:
                 print("Valeur du rang incorrect\n")
                 self._ranking = 0
 
-    def get_ranking(self) -> int:
+    def get_ranking(self) -> float:
         """Getter ranking"""
         return self._ranking

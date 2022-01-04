@@ -18,11 +18,6 @@ class TournamentManager:
     def new_tournament(self) -> None:
         """Creat a new tournament"""
         specifications_new_tournament = self.tournament_view.new_tournament()
-
-        specifications_new_tournament['_id_stage'] = []
-        for number_stage in range(specifications_new_tournament['_stage']):
-            specifications_new_tournament['_id_stage'].append(self.stage_manager.create_stage({"_number": number_stage+1}))
-
         create_players = self.tournament_view.create_players()
 
         if create_players == 1:
@@ -33,7 +28,15 @@ class TournamentManager:
 
         new_tournament = t(specifications_new_tournament)
         self.database_manager.insert_into_db(self.TABLE_NAME, new_tournament)
+        id_tournament = self.database_manager.last_insert(self.TABLE_NAME)
 
+        list_id_stage = []
+        for number_stage in range(specifications_new_tournament['_stage']):
+            list_id_stage.append(self.stage_manager.create_stage({
+                "_number": number_stage+1,
+                "_id_tournament": id_tournament}))
+        new_tournament._id_stage = list_id_stage
+        self.update_tournament_db(new_tournament, id_tournament)
         self.tournament_view.except_value("\nNouveau tournoi créé !\n")
         
     def list_tournament(self) -> None:
@@ -61,13 +64,14 @@ class TournamentManager:
             list_players_object = self.hydrate_list_players(tournament._list_players)
 
         sorted_id_stage = sorted(tournament._id_stage)
-        for stage in sorted_id_stage:
-            stage = self.stage_manager.launch_stage(stage)
+        for stage_id in sorted_id_stage:
+            stage = self.stage_manager.search_stage_by_id(stage_id)
             if stage._status == 1:
                 self.tournament_view.except_value(f"\nVeuillez mettre fin au tour n°{stage._number} du tournoi {stage._id}, avant d'en lancer un nouveau !\n")
                 break
             elif stage._status == 0:
                 self.stage_manager.stage_to_launch(stage, list_players_object)
+                tournament._stage_in_progress = stage._number
                 tournament._status = 1
                 self.update_tournament_db(tournament, tournament._id)
                 break
@@ -75,7 +79,13 @@ class TournamentManager:
 
     def close_stage_of_tournament(self):
         """Launch a tournament where status is in progress"""
-        list_tournament_in_progress = self.get_status_of_tournament(1)
+        tournament = self.get_status_of_tournament(1)
+        self.stage_manager.close_stage(tournament._id)
+        if tournament._stage_in_progress == len(tournament._id_stage):
+            tournament._status = 2
+        else:
+            tournament._status = 0
+        self.update_tournament_db(tournament, tournament._id)
 
 
     def get_status_of_tournament(self, status):
@@ -84,16 +94,21 @@ class TournamentManager:
         tournament_status_object = []
         for tournament in tournament_status:
             tournament_status_object.append(self.hydrate_object_with_json(tournament))
-        self.tournament_view.print_list_tournament(tournament_status_object)
+        
+        self.tournament_view.print_list_tournament_in_progess(tournament_status_object)
+        return self.tournament_to_launch(tournament_status_object, status)
+
+    def tournament_to_launch(self, list_tournament, status):
+        """Return tournament where ID is in list"""
         id_tournament_to_launch = self.tournament_view.launch_stage_tournament()
 
-        if id_tournament_to_launch in [tournament._id for tournament in tournament_status_object]:
-            for tournament in tournament_status_object:
+        if id_tournament_to_launch in [tournament._id for tournament in list_tournament]:
+            for tournament in list_tournament:
                 if id_tournament_to_launch == tournament._id:
                     return tournament
         else:
             self.tournament_view.except_value("ID incorrect")
-            self.get_status_of_tournament()
+            self.get_status_of_tournament(status)
 
     def hydrate_object_with_json(self, json_to_hydrate):
         """Hydrate tournament object with a JSON"""
