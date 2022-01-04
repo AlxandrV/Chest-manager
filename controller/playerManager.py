@@ -43,8 +43,26 @@ class PlayerManager:
             player_to_add = self.hydrate_object_with_json(self.database_manager.search_single("player", id_player))
             self.player_view.except_value(f"{player_to_add._name} {player_to_add._last_name} ajouté au tournoi !\n")
             return player_to_add
+    
+    def list_players(self):
+        list_players = self.database_manager.search_multiple(self.TABLE_NAME, 0)
+        list_players_object = [self.hydrate_object_with_json(player) for player in list_players]
+        self.player_view.print_list_players(list_players_object)
+    
+    def update_ranking(self):
+        list_players = self.database_manager.search_multiple(self.TABLE_NAME, 0)
+        list_players_object = [self.hydrate_object_with_json(player) for player in list_players]
+        id_player = self.player_view.select_player()
+        for player in list_players_object:
+            if player._id == id_player:
 
-    def list_players(self, number_to_range):
+                new_ranking = self.player_view.update_ranking(player)
+                player._ranking = new_ranking
+                self.update_player_db(player, player._id)
+                self.player_view.except_value(f"{player._name} {player._last_name} mis à jour !\n")
+                break
+
+    def get_players(self, number_to_range):
         """Return a list players object"""
         list_id_players = []
         for player in range(number_to_range):
@@ -52,6 +70,11 @@ class PlayerManager:
             list_id_players.append(new_player)
         return list_id_players
 
+    def get_players_in_stage(self, list_id_players):
+        list_players = []
+        for id_player in list_id_players:
+            list_players.append(self.hydrate_object_by_id(id_player))
+        return list_players
 
     def generate_pairs(self, list_players) -> list:
         """Sorted list of players by ranking and generate a pair of players"""

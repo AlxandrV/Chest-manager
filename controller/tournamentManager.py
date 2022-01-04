@@ -110,6 +110,32 @@ class TournamentManager:
             self.tournament_view.except_value("ID incorrect")
             self.get_status_of_tournament(status)
 
+    def tournament_report(self):
+        list_tournament = self.database_manager.search_multiple(self.TABLE_NAME, 0)
+        list_tournament_object = []
+        for tournament in list_tournament:
+            tournament = self.hydrate_object_with_json(tournament)
+            if tournament._status == 1 or tournament._status == 2:
+                list_tournament_object.append(tournament)
+        self.tournament_view.print_list_tournament_in_progess(list_tournament_object)
+        id_tournament = self.tournament_view.launch_stage_tournament()
+
+        if id_tournament == "q":
+            return True
+        else:
+            try:
+                id_tournament = int(id_tournament)
+            except ValueError as e:
+                self.tournament_view.except_value("Valeur incorrect !\n")
+                return self.tournament_report()
+        for tournament in list_tournament_object:
+            if tournament._id == id_tournament:
+                resut = self.stage_manager.stage_report(tournament)
+                if resut == True:
+                    self.tournament_report()
+
+                
+
     def hydrate_object_with_json(self, json_to_hydrate):
         """Hydrate tournament object with a JSON"""
         return json.loads(json_to_hydrate, object_hook=t)

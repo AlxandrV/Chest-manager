@@ -139,17 +139,11 @@ class TournamentView:
         except ValueError as e:
                 self.view.print_to_user("Veuillez choisir un nombre dans la liste !")
                 return self.create_players()
+    
 
     def launch_stage_tournament(self) -> None:
-        id_tournament = self.view.input("Renseigner l'ID du tournoi à lancer : ")
-
-        try:
-            return int(id_tournament)
-    
-        except ValueError as e:
-            self.view.print_to_user("Rentrer un nombre !")
-            return self.launch_stage_tournament()
-
+        return self.view.input("ID du tournoi ou \"q\" pour revenir au menu principale : ")
+        
     def print_list_tournament_in_progess(self, list_tournament):
         table_list_tournament = PrettyTable(["ID", "Nom", "Lieu", "Date début", "Date fin", "Contrôle du temps", "Status", "Round joué"])
         

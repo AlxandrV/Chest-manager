@@ -1,4 +1,5 @@
 from datetime import datetime
+from prettytable import PrettyTable
 
 from view.view import View as v
 
@@ -90,6 +91,37 @@ class PlayerView:
         except ValueError as e:
             self.view.print_to_user("Saisissez un nombre !")
             return self.select_player()
+
+    def print_list_players(self, list_players):
+        table_list_player = PrettyTable(["ID", "Prénom", "Nom", "Date de naissance", "Genre", "Rang"])
+        
+        for element in list_players:
+            if element._gender == 1:
+                gender = "M"
+            elif element._gender == 2:
+                gender = "F"
+            elif element._gender == 3:
+                gender = "Autre"
+            else:
+                gender = "Error"
+
+            table_list_player.add_row([
+                element._id, 
+                element._name, 
+                element._last_name, 
+                element._birthday, 
+                gender,
+                element._ranking])
+
+        self.except_value(table_list_player)   
+
+    def update_ranking(self, player):
+        self.print_list_players([player])
+        try:
+            return float(self.view.input("Nouveau rang : "))
+        except ValueError as e:
+            self.except_value("Rentrer un nombre !\n")
+            return self.update_ranking(player)
 
     def except_value(self, string_to_except):
         self.view.print_to_user(string_to_except)

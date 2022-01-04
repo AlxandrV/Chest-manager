@@ -17,38 +17,67 @@ class Controller:
 
     def switch_choice(self):
         """List of interactions choices"""
-        self._view.list_choice()
-        choice = self._view.choice
+        choice = self._view.list_choice()
 
         if choice == 1:
-            self.create_tournament()
+            self.player_choice()
         elif choice == 2:
-            self.player_manager.new_player()
+            self.tournament_choice()
         elif choice == 3:
-            self.list_tournament()
-        elif choice == 4:
-            print("Liste des joueurs à venir...")
-        elif choice == 5:
             self.launch_stage_tournament()
-        elif choice == 6:
+        elif choice == 4:
             self.close_stage()
         else:
-            print("\nCe choix n'est pas dans la iste !\n")
+            self._view.print_to_user("\nCe choix n'est pas dans la iste !\n")
             self.switch_choice()
         self.switch_choice()
+
+    def player_choice(self):
+        """List chooice for players interactions"""
+        self.list_players()
+        choice = self._view.player_choice()
+        if choice == "1":
+            self.create_player()
+        elif choice == "2":
+            self.update_ranking()
+        elif choice == "q":
+            self.switch_choice()
+        else:
+            self._view.print_to_user("\nCe choix n'est pas dans la iste !\n")
+            self.player_choice()
+
+    def list_players(self):
+        self.player_manager.list_players()
+
+    def update_ranking(self):
+        self.player_manager.update_ranking()
+
+    def create_player(self):
+        """Create a new player"""
+        self._view.print_to_user("\nCréation d'un nouveau joueur :\n")
+        self.player_manager.new_player()
+
+    def tournament_choice(self):
+        """List of tournaments"""
+        self.tournament_manager.list_tournament()
+        choice = self._view.tournament_choice()
+        if choice == "1":
+            self.create_tournament()
+        elif choice == "2":
+            self.tournament_report()
+        elif choice == "q":
+            self.switch_choice()
+        else:
+            self._view.print_to_user("\nCe choix n'est pas dans la iste !\n")
+            self.player_choice()
 
     def create_tournament(self):
         """Create a new tournament"""
         self.tournament_manager.new_tournament()
         self.switch_choice()
 
-    def create_player(self, player_manager):
-        """Create a new player"""
-        player_manager.new_player()
-
-    def list_tournament(self):
-        """List of tournaments"""
-        self.tournament_manager.list_tournament()
+    def tournament_report(self):
+        self.tournament_manager.tournament_report()
     
     def launch_stage_tournament(self):
         """Launch a tournament"""

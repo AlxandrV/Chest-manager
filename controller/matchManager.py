@@ -49,6 +49,14 @@ class MatchManager:
             match._id_winner = winner
             self.update_match_db(match, match._id)
 
+    def match_report(self, stage, list_players):
+        list_match = self.database_manager.search_where(self.TABLE_NAME, "_id_stage", stage._id)
+        list_match_object = []
+        for stage in list_match:
+            list_match_object.append(self.hydrate_object_with_json(stage))
+        self.match_view.print_list_match(list_match_object, list_players)
+        self.match_view.quit_list()
+
     def hydrate_object_with_json(self, json_to_hydrate):
         """Hydrate match object with a JSON"""
         return json.loads(json_to_hydrate, object_hook=m)
