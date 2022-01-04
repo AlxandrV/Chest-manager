@@ -38,15 +38,6 @@ class TournamentManager:
         new_tournament._id_stage = list_id_stage
         self.update_tournament_db(new_tournament, id_tournament)
         self.tournament_view.except_value("\nNouveau tournoi créé !\n")
-        
-    def list_tournament(self) -> None:
-        """List of tournaments"""
-        list_tournament = self.database_manager.search_multiple(self.TABLE_NAME, 0)
-        list_tournament_object = []
-        for tournament in list_tournament:
-            list_tournament_object.append(self.hydrate_object_with_json(tournament))
-        self.tournament_view.print_list_tournament(list_tournament_object)
-
 
     def launch_stage_tournament(self) -> None:
         """Launch a tournament where status is not launched"""
@@ -97,6 +88,15 @@ class TournamentManager:
         
         self.tournament_view.print_list_tournament_in_progess(tournament_status_object)
         return self.tournament_to_launch(tournament_status_object, status)
+
+    def list_tournament(self) -> None:
+        """List of tournaments"""
+        list_tournament = self.database_manager.search_multiple(self.TABLE_NAME, 0)
+        list_tournament_object = []
+        for tournament in list_tournament:
+            list_tournament_object.append(self.hydrate_object_with_json(tournament))
+        self.tournament_view.print_list_tournament_in_progess(list_tournament_object)
+
 
     def tournament_to_launch(self, list_tournament, status):
         """Return tournament where ID is in list"""

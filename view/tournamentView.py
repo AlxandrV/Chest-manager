@@ -168,7 +168,7 @@ class TournamentView:
             elif element._status == 1:
                 status = "En cours"
             else:
-                status = "Déjà joué"
+                status = "Terminé"
 
             table_list_tournament.add_row([
                 element._id, 

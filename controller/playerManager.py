@@ -17,6 +17,7 @@ class PlayerManager:
         specifications_new_player = self.player_view.new_player()
         player =  p(specifications_new_player)
         self.database_manager.insert_into_db(self.TABLE_NAME, player)
+        self.player_view.except_value(f"Joueur {player._name} {player._last_name} créé !\n")
 
     def add_player(self) -> object:
         """Create a new player or get a player in Database"""

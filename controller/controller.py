@@ -23,7 +23,7 @@ class Controller:
         if choice == 1:
             self.create_tournament()
         elif choice == 2:
-            print("Ajout de joueur à venir...")
+            self.player_manager.new_player()
         elif choice == 3:
             self.list_tournament()
         elif choice == 4:

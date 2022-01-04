@@ -15,7 +15,7 @@ class PlayerView:
         specifications['_name'] = name
 
         lastname = self.lastname()
-        specifications['_lastname'] = lastname
+        specifications['_last_name'] = lastname
 
         birthday = self.birthday()
         specifications['_birthday'] = birthday
