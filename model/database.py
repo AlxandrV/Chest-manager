@@ -21,7 +21,7 @@ class Database:
         """Search and return a single value by id"""
         return datas_table.get(doc_id=id_value)
 
-    def search_more(self, datas_table, index_start, limit=10):
+    def search_more(self, datas_table, index_start, limit=None):
         """Search and return a multiple values"""
         return datas_table.all()[index_start:limit]
 

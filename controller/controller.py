@@ -20,7 +20,7 @@ class Controller:
         choice = self._view.list_choice()
 
         if choice == 1:
-            self.player_choice()
+            self.player_choice(0)
         elif choice == 2:
             self.tournament_choice()
         elif choice == 3:
@@ -32,22 +32,26 @@ class Controller:
             self.switch_choice()
         self.switch_choice()
 
-    def player_choice(self):
+    def player_choice(self, sorted_status):
         """List chooice for players interactions"""
-        self.list_players()
+        self.list_players(sorted_status)
         choice = self._view.player_choice()
         if choice == "1":
             self.create_player()
         elif choice == "2":
             self.update_ranking()
+        elif choice == "3":
+            self.player_choice(1)
+        elif choice == "4":
+            self.player_choice(2)
         elif choice == "q":
             self.switch_choice()
         else:
             self._view.print_to_user("\nCe choix n'est pas dans la iste !\n")
-            self.player_choice()
+            self.player_choice(0)
 
-    def list_players(self):
-        self.player_manager.list_players()
+    def list_players(self, sorted_status):
+        self.player_manager.list_players(sorted_status)
 
     def update_ranking(self):
         self.player_manager.update_ranking()
@@ -69,7 +73,7 @@ class Controller:
             self.switch_choice()
         else:
             self._view.print_to_user("\nCe choix n'est pas dans la iste !\n")
-            self.player_choice()
+            self.player_choice(0)
 
     def create_tournament(self):
         """Create a new tournament"""

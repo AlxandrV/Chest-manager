@@ -21,9 +21,8 @@ class TournamentManager:
         create_players = self.tournament_view.create_players()
 
         if create_players == 1:
-            list_players_object = self.player_manager.list_players(specifications_new_tournament['_number_players'])
+            list_players_object = self.player_manager.get_players(specifications_new_tournament['_number_players'])
             list_players_id = [id_player._id for id_player in list_players_object]
-
             specifications_new_tournament['_list_players'] = list_players_id
 
         new_tournament = t(specifications_new_tournament)
@@ -41,15 +40,20 @@ class TournamentManager:
 
     def launch_stage_tournament(self) -> None:
         """Launch a tournament where status is not launched"""
-        tournament = self.get_status_of_tournament(0)
+        tournaments = self.get_status_of_tournament([0, 1])
+        tournament = self.tournament_to_launch(tournaments)
 
-        if self.has_attribute(tournament, '_list_players') == False:
+        if tournament == True:
+            return True
+        elif tournament == False:
+            self.launch_stage_tournament()
+
+        if hasattr(tournament, '_list_players') == False:
             self.tournament_view.except_value(
                 "\nPas de joueurs enregistré pour ce tournoi !\n"
                 "Veuillez en ajouter :")
-            list_players_object = self.player_manager.list_players(tournament._number_players)
-            list_players_id = [id_player._id for id_player in list_players_object]
-            setattr(tournament, '_list_players', list_players_id)
+            list_players_object = self.player_manager.get_players(tournament._number_players)
+            tournament._list_players = [player._id for player in list_players_object]
             self.update_tournament_db(tournament, tournament._id)
         else:
             list_players_object = self.hydrate_list_players(tournament._list_players)
@@ -70,71 +74,60 @@ class TournamentManager:
 
     def close_stage_of_tournament(self):
         """Launch a tournament where status is in progress"""
-        tournament = self.get_status_of_tournament(1)
+        tournaments = self.get_status_of_tournament([1])
+        tournament = self.tournament_to_launch(tournaments)
+
+        if tournament == True:
+            return True
         self.stage_manager.close_stage(tournament._id)
+        tournament._stage_in_progress += 1
         if tournament._stage_in_progress == len(tournament._id_stage):
             tournament._status = 2
         else:
-            tournament._status = 0
+            tournament._status = 1
         self.update_tournament_db(tournament, tournament._id)
 
 
-    def get_status_of_tournament(self, status):
+    def get_status_of_tournament(self, list_status):
         """Return a list of tournaments by status"""
-        tournament_status = self.database_manager.search_where(self.TABLE_NAME, '_status', status)
         tournament_status_object = []
-        for tournament in tournament_status:
-            tournament_status_object.append(self.hydrate_object_with_json(tournament))
-        
+        for status in list_status:
+            tournament_status = self.database_manager.search_where(self.TABLE_NAME, '_status', status)
+            for tournament in tournament_status:
+                tournament_status_object.append(self.hydrate_object_with_json(tournament))
+
         self.tournament_view.print_list_tournament_in_progess(tournament_status_object)
-        return self.tournament_to_launch(tournament_status_object, status)
+        return tournament_status_object
 
     def list_tournament(self) -> None:
-        """List of tournaments"""
-        list_tournament = self.database_manager.search_multiple(self.TABLE_NAME, 0)
-        list_tournament_object = []
-        for tournament in list_tournament:
-            list_tournament_object.append(self.hydrate_object_with_json(tournament))
-        self.tournament_view.print_list_tournament_in_progess(list_tournament_object)
+        """List all tournaments"""
+        self.get_status_of_tournament([2, 1, 0])
 
-
-    def tournament_to_launch(self, list_tournament, status):
+    def tournament_to_launch(self, list_tournament):
         """Return tournament where ID is in list"""
         id_tournament_to_launch = self.tournament_view.launch_stage_tournament()
 
-        if id_tournament_to_launch in [tournament._id for tournament in list_tournament]:
+        if id_tournament_to_launch in [str(tournament._id) for tournament in list_tournament]:
             for tournament in list_tournament:
-                if id_tournament_to_launch == tournament._id:
+                if id_tournament_to_launch == str(tournament._id):
                     return tournament
-        else:
-            self.tournament_view.except_value("ID incorrect")
-            self.get_status_of_tournament(status)
-
-    def tournament_report(self):
-        list_tournament = self.database_manager.search_multiple(self.TABLE_NAME, 0)
-        list_tournament_object = []
-        for tournament in list_tournament:
-            tournament = self.hydrate_object_with_json(tournament)
-            if tournament._status == 1 or tournament._status == 2:
-                list_tournament_object.append(tournament)
-        self.tournament_view.print_list_tournament_in_progess(list_tournament_object)
-        id_tournament = self.tournament_view.launch_stage_tournament()
-
-        if id_tournament == "q":
+        elif id_tournament_to_launch == "q":
             return True
         else:
-            try:
-                id_tournament = int(id_tournament)
-            except ValueError as e:
-                self.tournament_view.except_value("Valeur incorrect !\n")
-                return self.tournament_report()
-        for tournament in list_tournament_object:
-            if tournament._id == id_tournament:
-                resut = self.stage_manager.stage_report(tournament)
-                if resut == True:
-                    self.tournament_report()
+            self.tournament_view.except_value("ID incorrect")
+            return False
 
-                
+    def tournament_report(self):
+        """Genrate a report of tournaments"""
+        tournaments = self.get_status_of_tournament([2, 1, 0])
+        tournament = self.tournament_to_launch(tournaments)
+        if tournament == False:
+            return self.tournament_report()
+        elif tournament == True:
+            return True
+        resut = self.stage_manager.stage_report(tournament)
+        if resut == True:
+            return self.tournament_report()
 
     def hydrate_object_with_json(self, json_to_hydrate):
         """Hydrate tournament object with a JSON"""
@@ -146,13 +139,6 @@ class TournamentManager:
         for id_player in list_players_id:
             list_players.append(self.player_manager.hydrate_object_by_id(id_player))
         return list_players
-
-    def has_attribute(self, object_with_attr, nam_attr):
-        """Verify is has attribute"""
-        if hasattr(object_with_attr, nam_attr):
-            return True
-        else:
-            return False
 
     def update_tournament_db(self, object_to_update, id_to_object):
         """Update a tournament in database"""

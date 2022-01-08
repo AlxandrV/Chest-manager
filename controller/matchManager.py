@@ -30,19 +30,20 @@ class MatchManager:
         list_match_object = [self.hydrate_object_with_json(match) for match in list_match]
 
         for match in list_match_object:
-            list_player = []
-            for id_player in match._id_players:
-                player = self.player_manager.hydrate_object_by_id(id_player)
-                list_player.append(player)
+            list_player = [self.player_manager.hydrate_object_by_id(id_player) for id_player in match._id_players]
             winner = self.match_view.play_match(match, list_player)
 
             if winner == str(list_player[0]._id):
                 list_player[0]._ranking += 1
+                list_player[0]._temp_rank += 1
             elif winner == str(list_player[1]._id):
                 list_player[1]._ranking += 1
+                list_player[1]._temp_rank += 1
             elif winner == "nulle":
                 list_player[0]._ranking += .5
+                list_player[0]._temp_rank += .5
                 list_player[1]._ranking += .5
+                list_player[1]._temp_rank += .5
             
             for player in list_player:
                 self.player_manager.update_player_db(player, player._id)
@@ -50,12 +51,14 @@ class MatchManager:
             self.update_match_db(match, match._id)
 
     def match_report(self, stage, list_players):
+        """Print report of a match"""
         list_match = self.database_manager.search_where(self.TABLE_NAME, "_id_stage", stage._id)
         list_match_object = []
-        for stage in list_match:
-            list_match_object.append(self.hydrate_object_with_json(stage))
+        for match in list_match:
+            list_match_object.append(self.hydrate_object_with_json(match))
         self.match_view.print_list_match(list_match_object, list_players)
         self.match_view.quit_list()
+        return True
 
     def hydrate_object_with_json(self, json_to_hydrate):
         """Hydrate match object with a JSON"""

@@ -20,6 +20,8 @@ class View:
             "\nQue voulez-vous faire :\n"
             "1 : Ajouter un nouveau joueur\n"
             "2 : Modifer le rang d'un joueur\n"
+            "3 : Trier par ordre alphabétique\n"
+            "4 : Trier par rang\n"
             "q : Retour au menu principale"
             "\nChoix : ")
 

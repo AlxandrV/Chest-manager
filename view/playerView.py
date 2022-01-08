@@ -85,12 +85,18 @@ class PlayerView:
             print(f"Veuillez choisir un nombre dans la liste !")
             return self.gender()
 
-    def select_player(self, string_to_input="ID du joueur : "):
+    def select_player(self, list_player, string_to_input="ID du joueur : "):
         try:
-            return int(self.view.input(string_to_input))
+            id_player = int(self.view.input(string_to_input))
+            for player in list_player:
+                if id_player == player._id:
+                    return player
+            self.view.print_to_user("Saisissez un nombre dans la liste !")
+            return self.select_player(list_player)
+
         except ValueError as e:
             self.view.print_to_user("Saisissez un nombre !")
-            return self.select_player()
+            return self.select_player(list_player)
 
     def print_list_players(self, list_players):
         table_list_player = PrettyTable(["ID", "Prénom", "Nom", "Date de naissance", "Genre", "Rang"])

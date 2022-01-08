@@ -26,8 +26,7 @@ class StageManager:
     def search_stage_by_id(self, id_stage) -> object:
         """Return a stage by ID"""
         stage_json = self.database_manager.search_single(self.TABLE_NAME, id_stage)
-        stage = self.hydrate_object_with_json(stage_json)
-        return stage
+        return self.hydrate_object_with_json(stage_json)
     
     def search_stage_by_condition(self, key, value):
         """Search in database by condition"""
@@ -37,13 +36,12 @@ class StageManager:
             if stage._status == 1:
                 return stage
 
-    def hydrate_object_with_json(self, json_to_hydrate):
-        """Hydrate tournament object with a JSON"""
-        return json.loads(json_to_hydrate, object_hook=s)
-
     def stage_to_launch(self, stage, list_players):
         """Generate list match for a stage"""
-        list_pairs_players = self.player_manager.generate_pairs(list_players)
+        if stage._number == 1:
+            list_pairs_players = self.player_manager.generate_pairs_first_stage(list_players)
+        elif stage._number >= 2:
+            list_pairs_players = self.player_manager.generate_pairs_more_stage(list_players)
 
         list_id_match = []
         for i in range(len(list_pairs_players)):
@@ -65,28 +63,33 @@ class StageManager:
         self.update_stage_db(stage, stage._id)
 
     def stage_report(self, tournament):
+        """Generate a report of stages list in a tournament"""
         list_stage = self.database_manager.search_where(self.TABLE_NAME, "_id_tournament", tournament._id)
         list_stage_object = []
         for stage in list_stage:
             list_stage_object.append(self.hydrate_object_with_json(stage))
+
         self.stage_view.print_list_stage(list_stage_object)
         id_stage = self.stage_view.select_stage()
-
         if id_stage == "q":
             return True
         else:
             try:
                 id_stage = int(id_stage)
             except ValueError as e:
-                self.tournament_view.except_value("Valeur incorrect !\n")
-                return self.stage_report()
+                self.stage_view.except_value("\nValeur incorrect !\n")
+                return self.stage_report(tournament)
 
         for stage in list_stage_object:
             if stage._id == id_stage:
-                list_players = self.player_manager.get_players_in_stage(tournament._list_players)
+                list_players = self.player_manager.get_players_from_list_id(tournament._list_players)
                 result = self.match_manager.match_report(stage, list_players)
                 if result == True:
                     self.stage_report(tournament)
+
+    def hydrate_object_with_json(self, json_to_hydrate):
+        """Hydrate tournament object with a JSON"""
+        return json.loads(json_to_hydrate, object_hook=s)
 
     def update_stage_db(self, object_to_update, id_to_object):
         """Update a tournament in database"""
