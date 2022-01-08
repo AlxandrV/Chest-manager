@@ -2,6 +2,7 @@ from view.view import View as v
 from controller.tournamentManager import TournamentManager as tm
 from controller.playerManager import PlayerManager as pm
 
+
 class Controller:
 
     def __init__(self) -> None:
@@ -82,11 +83,11 @@ class Controller:
 
     def tournament_report(self):
         self.tournament_manager.tournament_report()
-    
+
     def launch_stage_tournament(self):
         """Launch a tournament"""
         bool_result = self.tournament_manager.launch_stage_tournament()
-        if bool_result == False:
+        if bool_result is False:
             self.main()
 
     def close_stage(self):

@@ -1,7 +1,5 @@
-from datetime import datetime
-
 class Player:
-    
+
     def __init__(self, specifications) -> None:
         if '_id' in specifications:
             self._id = specifications['_id']

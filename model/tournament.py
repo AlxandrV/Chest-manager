@@ -1,7 +1,5 @@
-from datetime import datetime
-
 class Tournament:
-    
+
     def __init__(self, specifications) -> None:
         if '_id' in specifications:
             self._id = specifications['_id']
@@ -11,7 +9,7 @@ class Tournament:
         self._date_end = specifications['_date_end']
         if '_id_stage' in specifications:
             self._id_stage = specifications['_id_stage']
-        self._time_control =specifications['_time_control']
+        self._time_control = specifications['_time_control']
         self._description = specifications['_description']
         self._number_players = specifications['_number_players']
         if '_list_players' in specifications:

@@ -1,8 +1,7 @@
 import json
 
-from tinydb.utils import T
-
 from model.database import Database as db
+
 
 class DatabaseManager:
 
@@ -37,7 +36,7 @@ class DatabaseManager:
     def search_multiple(self, table_name, index_start):
         """Return a list in table from an start index"""
         data_table = self._db.search_table(table_name)
-    
+
         datas = self._db.search_more(data_table, index_start)
         return [self.serialize_to_json(data) for data in datas]
 

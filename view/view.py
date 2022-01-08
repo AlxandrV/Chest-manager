@@ -11,7 +11,7 @@ class View:
                 "\nChoix : "))
             return input_choice
 
-        except ValueError as e:
+        except ValueError:
             print("\nVeuillez rentrer un nombre parmis la liste, merci !\n")
             self.list_choice()
 
@@ -32,7 +32,7 @@ class View:
             "2 : Rapport de tournoi déjà joué\n"
             "q : Retour au menu principale"
             "\nChoix : ")
-        
+
     def input(self, string_to_input) -> str:
         return input(string_to_input)
 

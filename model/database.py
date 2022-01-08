@@ -1,7 +1,5 @@
-from tinydb import TinyDB, Query, table, where
-import os
+from tinydb import TinyDB, Query, where
 
-from tinydb.utils import T
 
 class Database:
 

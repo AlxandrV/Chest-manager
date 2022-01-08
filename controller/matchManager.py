@@ -5,6 +5,7 @@ from controller.databaseManager import DatabaseManager as dbm
 from controller.playerManager import PlayerManager as pm
 from view.matchView import MatchView as mv
 
+
 class MatchManager:
 
     def __init__(self) -> None:
@@ -44,7 +45,7 @@ class MatchManager:
                 list_player[0]._temp_rank += .5
                 list_player[1]._ranking += .5
                 list_player[1]._temp_rank += .5
-            
+
             for player in list_player:
                 self.player_manager.update_player_db(player, player._id)
             match._id_winner = winner
