@@ -85,6 +85,10 @@ class TournamentManager:
         self.s_manager.close_stage(tournament._id)
         tournament._stage_in_progress += 1
         if tournament._stage_in_progress == len(tournament._id_stage):
+            p_list = [self.p_manager.hydrate_object_by_id(player_id) for player_id in tournament._list_players]
+            for player in p_list:
+                player._temp_rank = 0
+                self.p_manager.update_player_db(player, player._id)
             tournament._status = 2
         else:
             tournament._status = 1
