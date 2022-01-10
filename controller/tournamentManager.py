@@ -63,7 +63,10 @@ class TournamentManager:
         for stage_id in sorted_id_stage:
             stage = self.s_manager.search_stage_by_id(stage_id)
             if stage._status == 1:
-                self.t_view.except_value(f"\nVeuillez mettre fin au tour n°{stage._number} du tournoi {stage._id}, avant d'en lancer un nouveau !\n")
+                self.t_view.except_value(
+                    f"\nVeuillez mettre fin au tour n°{stage._number} "
+                    "du tournoi {stage._id}, avant d'en lancer un nouveau !\n"
+                    )
                 break
             elif stage._status == 0:
                 self.s_manager.stage_to_launch(stage, list_p_object)
