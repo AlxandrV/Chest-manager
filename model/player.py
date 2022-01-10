@@ -7,7 +7,10 @@ class Player:
         self._last_name = specifications['_last_name']
         self._gender = specifications['_gender']
         self._birthday = specifications['_birthday']
-        self._ranking = specifications['_ranking']
+        if '_ranking' in specifications:
+            self._ranking = specifications['_ranking']
+        else:
+            self._ranking = 0
         if '_temp_rank' in specifications:
             self._temp_rank = specifications['_temp_rank']
         else:

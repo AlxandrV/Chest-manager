@@ -17,7 +17,7 @@ class TournamentManager:
         self.db_manager = dbm()
 
     def new_tournament(self) -> None:
-        """Creat a new tournament"""
+        """Create a new tournament"""
         specifications_new_tournament = self.t_view.new_tournament()
         create_p = self.t_view.create_players()
 
@@ -67,7 +67,7 @@ class TournamentManager:
                 break
             elif stage._status == 0:
                 self.s_manager.stage_to_launch(stage, list_p_object)
-                tournament._stage_in_progress = stage._number
+                # tournament._stage_in_progress += 1
                 tournament._status = 1
                 self.update_tournament_db(tournament, tournament._id)
                 break

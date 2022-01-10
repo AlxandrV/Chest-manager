@@ -25,26 +25,26 @@ class PlayerManager:
         """Create a new player or get a player in Database"""
         statut_player = self.p_view.add_player()
         if statut_player == 1:
-            return self.new_player()
+            self.new_player()
+            player_id = self.db_manager.last_insert(self.TABLE_NAME)
+            return self.hydrate_object_by_id(player_id)
 
         elif statut_player == 2:
             list_p = self.db_manager.search_multiple(
                 self.TABLE_NAME,
                 0
                 )
+
             list_p_object = []
             for element in list_p:
-                list_p_object.append(self.hydrate_object_with_json(element))
-
-            list_to_print = []
-            for player in list_p_object:
-                if player._id in to_except or player._temp_rank is not False:
+                player = self.hydrate_object_with_json(element)
+                if player._id in to_except or player._temp_rank > 0:
                     pass
                 else:
-                    list_to_print.append(player)
+                    list_p_object.append(player)
 
-            self.p_view.print_list_players(list_to_print)
-            player = self.p_view.select_player(list_to_print)
+            self.p_view.print_list_players(list_p_object)
+            player = self.p_view.select_player(list_p_object)
             self.p_view.except_value(
                 f"{player._name} {player._last_name} ajouté au tournoi !\n"
                 )
@@ -67,9 +67,10 @@ class PlayerManager:
         list_p = self.db_manager.search_multiple(self.TABLE_NAME, 0)
         list_p_object = [self.hydrate_object_with_json(player) for player in list_p]
         id_player = self.p_view.select_player(list_p_object)
+        print(id_player)
         for player in list_p_object:
-            if player._id == id_player:
-
+            if player._id == id_player._id:
+                print(id_player)
                 new_ranking = self.p_view.update_ranking(player)
                 player._ranking = new_ranking
                 self.update_player_db(player, player._id)

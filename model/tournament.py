@@ -21,4 +21,4 @@ class Tournament:
         if '_stage_in_progress' in specifications:
             self._stage_in_progress = specifications['_stage_in_progress']
         else:
-            self._stage_in_progress = False
+            self._stage_in_progress = 0
